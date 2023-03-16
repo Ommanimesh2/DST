@@ -6,19 +6,19 @@ from rest_framework.generics import ListAPIView
 from rest_framework import status, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
-from .models import Renting
-from .serializer import RentingSerializer
+from .models import Stalls
+from .serializer import StallsSerializer
 from rest_framework.request import Request
 
 
-class RentMachine(ListAPIView):
-    serializer_class= RentingSerializer
+class AddStalls(ListAPIView):
+    serializer_class= StallsSerializer
     permission_classes=[]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['id', 'Name']
-    search_fields = ['Name']
+    filterset_fields = ['id', 'Stallstopic']
+    search_fields = ['Stallstopic']
     def post(self , request : Request):
-        serializer = RentingSerializer(data=request.data)
+        serializer = StallsSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save() 
@@ -26,27 +26,27 @@ class RentMachine(ListAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
        
     def get_queryset(self):
-        queryset = Renting.objects.all()
+        queryset = Stalls.objects.all()
         return queryset
     
-class UpdateRent(APIView):
+class UpdateStalls(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self,pk):
         try:
-            return Renting.objects.get(pk=pk)
+            return Stalls.objects.get(pk=pk)
         
-        except Renting.DoesNotExist:
+        except Stalls.DoesNotExist:
             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
     
     def get(self,request,pk):
         List = self.get_object(pk)
-        serializer = RentingSerializer(List)
+        serializer = StallsSerializer(List)
         return Response(serializer.data)
     
     def put(self, request, pk):
         List = self.get_object(pk)
-        serializer = RentingSerializer(List, data=request.data)
+        serializer = StallsSerializer(List, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
