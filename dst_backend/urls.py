@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.http import HttpResponse
+from django.conf import settings
 
-    
+from . import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
+    path('model/',views.thisView.as_view()),
     path('api/' , include('JobCreation.urls')),
     path('api/' , include('RentMachine.urls')),
     path('api/' , include('Stalls.urls')),
