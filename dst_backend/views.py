@@ -14,11 +14,11 @@ import os
 from rest_framework.views import APIView
 class thisView(APIView):
     def get(self , request, *args, **kwargs):
-        data_file_path = os.path.join(SITE_ROOT, 'static', 'apple_data.json')
+        data_file_path = os.path.join(SITE_ROOT, r'static', 'apple_data.json')
         District='Kolkata'
         Market='Mechua'
         Commodity='Apple'
-
+        print("Data file path is",data_file_path)
         DATA= json.load(open(data_file_path))
         print(DATA)
         month={'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
@@ -74,7 +74,7 @@ class thisView(APIView):
         for i in range(len(price)):
             date= str(price.index[i])[:10]
             date_price[date]=int(price.iloc[i])
-        print(date_price)
+
         return Response(data=date_price, status=status.HTTP_201_CREATED)
 
 

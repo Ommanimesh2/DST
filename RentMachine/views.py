@@ -30,7 +30,7 @@ class RentMachine(ListAPIView):
         return queryset
     
 class UpdateRent(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
 
     def get_object(self,pk):
         try:

@@ -5,8 +5,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import SignUpSerializer
+from .serializers import SignUpSerializer,UserSerializer
 from .tokens import create_jwt_pair_for_user
+from .models import User
 
 # Create your views here.
 
@@ -36,23 +37,24 @@ class LoginView(APIView):
     def post(self, request: Request):
         email = request.data.get("email")
         password = request.data.get("password")
+        try:
+            userdet = User.objects.get(email=email)
+            serializer= UserSerializer(userdet)
+        
+            user = authenticate(email=email, password=password)
+    
+            if user is not None:
 
-        user = authenticate(email=email, password=password)
+                tokens = create_jwt_pair_for_user(user)
 
-        if user is not None:
+                response = {"user": serializer.data, "tokens": tokens}
+                return Response(data=response, status=status.HTTP_200_OK)
 
-            tokens = create_jwt_pair_for_user(user)
-
-            response = {"message": "Login Successfull", "tokens": tokens}
-            return Response(data=response, status=status.HTTP_200_OK)
-
-        else:
-            return Response(data={"message": "Invalid email or password"})
-
-    def get(self, request: Request):
-        content = {"user": str(request.user), "auth": str(request.auth)}
-
-        return Response(data=content, status=status.HTTP_200_OK)
+            else:
+                return Response(data={"message": "Invalid email or password"})
+        except:
+            return Response(data={"message": "Invalid"})
+    
 
 class LogoutView(APIView):
     permission_classes =[]
@@ -67,3 +69,27 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+class UserDetails(APIView):
+    def get_object(self,request ,pk):
+        try:
+            return User.objects.get(pk=pk)
+        
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    def get(self, request: Request,pk):
+         
+         user= self.get_object(self , pk)
+         serializer= UserSerializer(user)
+         print(serializer.data)
+         return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+
+    def put(self, request, pk):
+        List = self.get_object(self, pk)
+        serializer = UserSerializer(List, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -33,9 +33,10 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     email = models.CharField(max_length=80, unique=True)
     username = models.CharField(max_length=45,unique=True )
+    isAdmin = models.BooleanField(default=False)
     objects = CustomUserManager()
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = ["username","isAdmin"]
 
     def __str__(self):
         return self.username
