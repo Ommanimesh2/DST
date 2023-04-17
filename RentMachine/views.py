@@ -32,8 +32,9 @@ class RentMachine(ListAPIView):
     def get_queryset(self):
         queryset = Renting.objects.all()
         return queryset
-    
-   
+
+
+
 
 class UpdateRent(APIView):
     @authentication_classes((SessionAuthentication, TokenAuthentication, BasicAuthentication))
@@ -103,16 +104,12 @@ class UserRent(APIView):
         return Response(serializer.data)
 
 
-class Orderss(APIView):
-
-
+class Orderss(ListAPIView):
     serializer_class= OrderSerializer
-    # permission_classes=[]
+    permission_classes=[]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-
-    @authentication_classes((SessionAuthentication, TokenAuthentication, BasicAuthentication))
-    @permission_classes((IsAuthenticated,)) 
-
+    # filterset_fields = ['id', 'Name']
+    # search_fields = ['Name']
     def post(self , request : Request):
         serializer = OrderSerializer(data=request.data)
 
@@ -121,8 +118,6 @@ class Orderss(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
        
-    def get(self):
+    def get_queryset(self):
         queryset = Orders.objects.all()
         return queryset
-     
-
