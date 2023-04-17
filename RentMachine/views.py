@@ -6,8 +6,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework import status, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
-from .models import Renting
-from .serializer import RentingSerializer
+from .models import Renting,Orders
+from .serializer import RentingSerializer,OrderSerializer
 from rest_framework.request import Request
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
@@ -102,4 +102,27 @@ class UserRent(APIView):
         serializer = RentingSerializer(List)
         return Response(serializer.data)
 
+
+class Orderss(APIView):
+
+
+    serializer_class= OrderSerializer
+    # permission_classes=[]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+
+    @authentication_classes((SessionAuthentication, TokenAuthentication, BasicAuthentication))
+    @permission_classes((IsAuthenticated,)) 
+
+    def post(self , request : Request):
+        serializer = OrderSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save() 
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+       
+    def get(self):
+        queryset = Orders.objects.all()
+        return queryset
+     
 
