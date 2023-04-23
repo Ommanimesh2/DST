@@ -41,9 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
-    'JobCreation',
-    'RentMachine',
-    'Stalls'
+    'RentMachine'
 ]
 STATIC_URL = 'static/'
 MIDDLEWARE = [

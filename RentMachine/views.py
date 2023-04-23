@@ -108,8 +108,6 @@ class Orderss(ListAPIView):
     serializer_class= OrderSerializer
     permission_classes=[]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    # filterset_fields = ['id', 'Name']
-    # search_fields = ['Name']
     def post(self , request : Request):
         serializer = OrderSerializer(data=request.data)
 

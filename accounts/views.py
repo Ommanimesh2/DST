@@ -9,8 +9,6 @@ from .serializers import SignUpSerializer,UserSerializer
 from .tokens import create_jwt_pair_for_user
 from .models import User
 
-# Create your views here.
-
 
 class SignUpView(generics.GenericAPIView):
     serializer_class = SignUpSerializer

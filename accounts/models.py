@@ -33,6 +33,8 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     email = models.CharField(max_length=80, unique=True)
     username = models.CharField(max_length=45,unique=True )
+    address = models.CharField(max_length=80, blank=True , default="")
+    phone_no = models.IntegerField(default="0")
     isAdmin = models.BooleanField(default=False)
     objects = CustomUserManager()
     USERNAME_FIELD = "email"
