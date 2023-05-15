@@ -21,8 +21,8 @@ class Orders(models.Model):
         ('Online', "Online Payement"),
     )
     machine_id=models.IntegerField(default="0")
-    start_date = models.DateField( auto_now=False, blank=True) 
-    end_date = models.DateField( auto_now=False, blank=True, default="2023-06-04")
+    date = models.DateField( auto_now=False, blank=True) 
+    date = models.DateField( auto_now=False, blank=True)
     placed_at=models.DateField(auto_now=True, blank=True  )
     user_id=models.IntegerField(default="0")
     payement_status=models.BooleanField("payement_status", default=False)

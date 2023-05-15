@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Renting,Orders
+from .models import Renting,Orders,query
 
 
 class RentingSerializer(serializers.ModelSerializer):
@@ -11,4 +11,9 @@ class RentingSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
+        fields = '__all__'
+
+class QuerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = query
         fields = '__all__'
