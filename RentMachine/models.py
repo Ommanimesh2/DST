@@ -31,10 +31,20 @@ class Orders(models.Model):
         return self.payement_mode    
     
 class query(models.Model):
-    machine_name=models.CharField(max_length=100)
-    message=models.CharField(max_length=200)
-    query_img=models.CharField(max_length=1000,blank=False, default="https://firebasestorage.googleapis.com/v0/b/bhoomirent-df650.appspot.com/o/rn_image_picker_lib_temp_2512f23f-19ab-4ea7-9a4a-48ae50b9de9c.jpg?alt=media&token=7293eb19-9505-4910-8eb9-ee58d2f14ae5")
+    name=models.CharField(max_length=100)
+    email = models.CharField(max_length=80,default="fdjgk")
+    subject = models.CharField(max_length=100,default="fdjgk")
+    message=models.CharField(max_length=500,default="fdjgk")
     user_id=models.IntegerField(default="0")
     
     def __str__(self):
-        return self.machine_name
+        return self.name
+    
+class FourImages(models.Model):
+    user_id=models.IntegerField(default="0")
+    first_img=models.CharField(max_length=1000, blank=True, default="https://firebasestorage.googleapis.com/v0/b/bhoomirent-df650.appspot.com/o/rn_image_picker_lib_temp_2512f23f-19ab-4ea7-9a4a-48ae50b9de9c.jpg?alt=media&token=7293eb19-9505-4910-8eb9-ee58d2f14ae5")
+    second_img=models.CharField(max_length=1000, blank=True, default="https://firebasestorage.googleapis.com/v0/b/bhoomirent-df650.appspot.com/o/rn_image_picker_lib_temp_2512f23f-19ab-4ea7-9a4a-48ae50b9de9c.jpg?alt=media&token=7293eb19-9505-4910-8eb9-ee58d2f14ae5")
+    third_img=models.CharField(max_length=1000, blank=True, default="https://firebasestorage.googleapis.com/v0/b/bhoomirent-df650.appspot.com/o/rn_image_picker_lib_temp_2512f23f-19ab-4ea7-9a4a-48ae50b9de9c.jpg?alt=media&token=7293eb19-9505-4910-8eb9-ee58d2f14ae5")
+    fourth_img=models.CharField(max_length=1000, blank=True, default="https://firebasestorage.googleapis.com/v0/b/bhoomirent-df650.appspot.com/o/rn_image_picker_lib_temp_2512f23f-19ab-4ea7-9a4a-48ae50b9de9c.jpg?alt=media&token=7293eb19-9505-4910-8eb9-ee58d2f14ae5")
+    def __str__(self):
+        return self.user_id
