@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Renting,Orders,query,FourImages
+from .models import Renting,Orders,query,FourImages,KVKs
 
 
 class RentingSerializer(serializers.ModelSerializer):
@@ -21,4 +21,9 @@ class QuerySerializer(serializers.ModelSerializer):
 class FourImgSerializer(serializers.ModelSerializer):
     class Meta:
         model= FourImages
+        fields='__all__'
+
+class KVKSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=KVKs
         fields='__all__'

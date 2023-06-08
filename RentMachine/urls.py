@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import RentMachine,UpdateRent,UserRent,Orderss,Query,FourImg
+from .views import RentMachine,UpdateRent,UserRent,Orderss,Query,FourImg,KVK
 
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
  path("rentinfo/", Orderss.as_view()),
  path("query/", Query.as_view()),
  path("imgs/", FourImg.as_view()),
+ path("kvks/", KVK.as_view())
 ]
