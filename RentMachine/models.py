@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from datetime import datetime
+import uuid
 # from django.contrib.gis.db import models
 
 
@@ -12,7 +13,7 @@ KVK_CHOICES=(
 )
 
 class KVKs(models.Model):
-    Name_KVK=models.CharField(choices='' ,max_length=200)
+    Name_KVK=models.CharField(choices=KVK_CHOICES ,max_length=200)
     Address=models.CharField(max_length=300)
     Contact_KVK=models.IntegerField()
     Name_of_Head=models.CharField(max_length=100)
@@ -23,6 +24,7 @@ class KVKs(models.Model):
     
 
 class Renting(models.Model):
+    KVK = models.ForeignKey(KVKs, on_delete=models.PROTECT)
     Name = models.CharField(max_length=30 )
     MachineDetails= models.CharField(max_length=200)
     Price= models.IntegerField(default="0")
