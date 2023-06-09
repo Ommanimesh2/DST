@@ -13,11 +13,18 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.pagination import PageNumberPagination
 
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class KVK(ListAPIView):
     serializer_class=KVKSerializer
     permission_classes=[]
+
     def post(self , request : Request):
         serializer = KVKSerializer(data=request.data)
 
@@ -30,12 +37,53 @@ class KVK(ListAPIView):
         queryset = KVKs.objects.all().order_by('Name_KVK')
         return queryset
 
+class KVK_pk(ListAPIView):
+    def get_object(self,pk):
+        try:
+            return KVKs.objects.get(pk=pk)
+        
+        except KVKs.DoesNotExist:
+            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+    
+
+    def get(self,request,pk):
+        List = self.get_object(pk)
+        serializer = KVKSerializer(List)
+        return Response(serializer.data)
+    
+    def put(self, request, pk):
+        List = self.get_object(pk)
+        serializer = KVKSerializer(List, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        List = self.get_object(pk)
+        List.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+    def patch(self, request ,pk):
+        List = self.get_object(pk)
+        data=request.data
+        serializer = KVKSerializer(List, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        return Response(code=400, data="wrong parameters")
+
+
+
 class RentMachine(ListAPIView):
     serializer_class= RentingSerializer
     permission_classes=[]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter , filters.OrderingFilter]
     filterset_fields = ['id', 'Name']
-    search_fields = ['Name']
+    ordering_fields = [ 'Product', 'quantity']
+    search_fields = ['^Name']
     def post(self , request : Request):
         serializer = RentingSerializer(data=request.data)
 
@@ -52,9 +100,13 @@ class RentMachine(ListAPIView):
 
 
 class UpdateRent(APIView):
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter , filters.OrderingFilter]
+    filterset_fields = ['id', 'Name']
+    ordering_fields = [ 'Product', 'quantity']
+    search_fields = ['^Name']
     @authentication_classes((SessionAuthentication, TokenAuthentication, BasicAuthentication))
     @permission_classes((IsAuthenticated,))
-
 
     def get_object(self,pk):
         try:
@@ -98,6 +150,7 @@ class UserRent(APIView):
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['user_id', 'Name']
+    
     search_fields = ['user_id']
 
     @authentication_classes((SessionAuthentication, TokenAuthentication, BasicAuthentication))

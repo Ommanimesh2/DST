@@ -7,16 +7,12 @@ class KVKSerializer(serializers.ModelSerializer):
         fields='__all__'
 
 class RentingSerializer(serializers.ModelSerializer):
-    KVK = KVKSerializer()
+    KVK = serializers.PrimaryKeyRelatedField(queryset=KVKs.objects.all())
     class Meta:
         model = Renting
         fields = '__all__'
+        depth = 1
 
-    def create(self, validated_data):
-        kvk_data = validated_data.pop('KVK')
-        kvk = KVKs.objects.create(**kvk_data)
-        renting = Renting.objects.create(KVK=kvk, **validated_data)
-        return renting
     
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:

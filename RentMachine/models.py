@@ -4,8 +4,6 @@ from datetime import datetime
 import uuid
 # from django.contrib.gis.db import models
 
-
-
 KVK_CHOICES=(
 ("Rajat Agricultural works","Rajat Agricultural works"),
 ("Rudraksh Farmtrac Roorkee","Rudraksh Farmtrac Roorkee"),
