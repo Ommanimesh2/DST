@@ -14,6 +14,9 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.pagination import PageNumberPagination
+from django.core import serializers
+from django.http import JsonResponse
+from django.db.models import F
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -93,16 +96,15 @@ class RentMachine(ListAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
        
     def get_queryset(self):
-        queryset = Renting.objects.all()
-        return queryset
-
+       queryset = Renting.objects.all()  
+       return queryset 
 
 
 
 class UpdateRent(APIView):
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter , filters.OrderingFilter]
-    filterset_fields = ['id', 'Name']
+    filterset_fields = ['KVK', 'Name']
     ordering_fields = [ 'Product', 'quantity']
     search_fields = ['^Name']
     @authentication_classes((SessionAuthentication, TokenAuthentication, BasicAuthentication))
