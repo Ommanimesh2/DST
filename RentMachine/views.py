@@ -87,13 +87,29 @@ class RentMachine(ListAPIView):
     filterset_fields = ['id', 'Name']
     ordering_fields = [ 'Product', 'quantity']
     search_fields = ['^Name']
-    def post(self , request : Request):
-        serializer = RentingSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save() 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        data = request.data  
+        serializer = RentingSerializer(data=data)
+        if not serializer.is_valid():
+            return JsonResponse(serializer.errors, status=400)
+        
+        kvk_id = data.get('KVK')
+        try:
+            kvk = KVKs.objects.get(id=kvk_id)
+        except KVKs.DoesNotExist:
+            return JsonResponse({'error': 'Invalid KVK ID'}, status=400)
+        
+        renting = Renting.objects.create(
+            KVK=kvk,
+            Name=data.get('Name'),
+            MachineDetails=data.get('MachineDetails'),
+            Price=data.get('Price'),
+            Contact=data.get('Contact'),
+            date=data.get('date')
+        )
+        response_data = RentingSerializer(renting).data
+        
+        return JsonResponse(response_data, status=201)
        
     def get_queryset(self):
        queryset = Renting.objects.all()  
