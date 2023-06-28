@@ -84,8 +84,8 @@ class RentMachine(ListAPIView):
     permission_classes=[]
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter , filters.OrderingFilter]
-    filterset_fields = ['id', 'Name']
-    ordering_fields = [ 'Product', 'quantity']
+    filterset_fields = ['Price', 'BookedStatus','KVK__Name_KVK']
+    ordering_fields = [ 'KVK__Name_KVK', 'Name','-created_at']
     search_fields = ['^Name','^KVK__Name_KVK']
     def post(self, request):
         data = request.data  
