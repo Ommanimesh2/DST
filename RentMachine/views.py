@@ -20,7 +20,7 @@ from django.db.models import F
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 8
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
@@ -86,7 +86,7 @@ class RentMachine(ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter , filters.OrderingFilter]
     filterset_fields = ['id', 'Name']
     ordering_fields = [ 'Product', 'quantity']
-    search_fields = ['^Name']
+    search_fields = ['^Name','^KVK__Name_KVK']
     def post(self, request):
         data = request.data  
         serializer = RentingSerializer(data=data)
